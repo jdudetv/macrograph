@@ -6,12 +6,12 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 
 const pkg = core.createPackage<any>({ name: "Discord" });
-
-const DiscURL = "https://discord.com/api/";
-const DiscHeader = "{\"Content-Type\":\"application/json\",\"Authorization\":\"Bot MzgzNTIyMDkwNjA0NjkxNDU4.GQtCMh.selfloR2BiY6JAGZY7AAu4N8i0hlyM0BAUiJBA\"}";
-
 export const LSTokenName = "discordBotToken"
 const Token = localStorage.getItem(LSTokenName);
+
+const DiscURL = "https://discord.com/api/";
+const DiscHeader = "{\"Content-Type\":\"application/json\",\"Authorization\":\"Bot \"" + Token + "\" \"}";
+
 
 
 const ws = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
