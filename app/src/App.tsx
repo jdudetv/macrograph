@@ -12,6 +12,7 @@ import { createForm, SubmitHandler, reset } from "@modular-forms/solid";
 
 const TWITCH_ACCESS_TOKEN = "TwitchAccessToken";
 
+
 function setupTwitch() {
   //@ts-expect-error
   return createResource(

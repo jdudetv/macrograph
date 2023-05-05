@@ -1,13 +1,18 @@
 import { core } from "../models";
 import { types } from "../types";
+import { invoke } from "@tauri-apps/api/tauri";
+
 // import { fetch, Body } from "tauri-plugin-http-api";
 
 
 const pkg = core.createPackage<any>({ name: "Discord" });
 
+const DiscURL = "https://discord.com/api/";
+const DiscHeader = "{\"Content-Type\":\"application/json\",\"Authorization\":\"Bot MzgzNTIyMDkwNjA0NjkxNDU4.GQtCMh.selfloR2BiY6JAGZY7AAu4N8i0hlyM0BAUiJBA\"}";
+
 export const LSTokenName = "discordBotToken"
 const Token = localStorage.getItem(LSTokenName);
-console.log(Token);
+
 
 const ws = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
 
@@ -121,15 +126,27 @@ pkg.createNonEventSchema({
         t.dataInput({
             id: "userId",
             name: "User ID",
-            type: types.int()
+            type: types.string()
+        });
+        t.dataOutput({
+            id: "userName",
+            name: "UserName",
+            type: types.string()
+        });
+        t.dataOutput({
+            id: "profile",
+            name: "UserName",
+            type: types.string()
         });
     },
     async run({ ctx }) {
-        const urlEnd = `users/${ctx.getInput("userId")}`;
-        const response = await SendMessage(urlEnd, {}, fetchTypes.GET);
-        console.log(response);
-    }
-})
+        let data = JSON.parse(await (invoke('http', { url: `${DiscURL}users/${ctx.getInput("userId")}`, headers: DiscHeader })));
+        console.log(data);
+        ctx.setOutput("userName", data.username);
+        ctx.setOutput("userName", data.username);
+        //     https://cdn.discordapp.com/avatars/103733084150591488/91bc8e9f59a70d9a1829b626c60e8d56
+        // }
+    })
 
 pkg.createEventSchema({
     name: "Discord Message",
